@@ -3,7 +3,7 @@ services:
   miniflux:
     image: miniflux/miniflux:latest
     ports:
-      - "8080:80"
+      - "8080:8080"
     environment:
       - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable
       - RUN_MIGRATIONS=1
