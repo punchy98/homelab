@@ -16,5 +16,5 @@ services:
            - /dev/shm/Shinobi/streams:/dev/shm/streams
            - /etc/localtime:/etc/localtime:ro
         ports:
-           - 8080:8070
+           - 8070:8080
         restart: unless-stopped
