@@ -20,9 +20,5 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - miniflux-db:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "miniflux"]
-      interval: 10s
-      start_period: 30s
 volumes:
   miniflux-db:
