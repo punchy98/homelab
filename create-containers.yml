@@ -1,0 +1,43 @@
+---
+ - hosts: 192.168.1.102
+   become: true
+   tasks:
+     - name: "Create directory for MiniFlux docker-compose"
+       file:
+         path: /tmp/miniflux
+         state: directory
+         mode: 0755
+     - name: "Pull MiniFlux from Github"
+       get_url:
+         url: https://raw.githubusercontent.com/punchy98/homelab/main/miniflux_docker-compose.yml
+         dest: /tmp/miniflux/docker-compose.yml
+     - name: "Create MiniFlux Container"
+       shell: docker-compose --file docker-compose.yml up -d
+       args:
+         chdir: /tmp/miniflux/
+     - name: "Create directory for OpenVPN docker-compose"
+       file:
+         path: /tmp/openvpn
+         state: directory
+         mode: 0755
+     - name: "Pull OpenVPN from Github"
+       get_url:
+         url: https://raw.githubusercontent.com/punchy98/homelab/main/openvpn_docker-compose.yml
+         dest: /tmp/openvpn/docker-compose.yml
+     - name: "Create OpenVPN Container"
+       shell: docker-compose --file docker-compose.yml up -d
+       args:
+         chdir: /tmp/openvpn/
+     - name: "Create directory for Shinobi docker-compose"
+       file:
+         path: /tmp/shinobi
+         state: directory
+         mode: 0755
+     - name: "Pull Shinobi from Github"
+       get_url:
+         url: https://raw.githubusercontent.com/punchy98/homelab/main/shinobi_docker-compose.yml
+         dest: /tmp/shinobi/docker-compose.yml
+     - name: "Create Shinobi Container"
+       shell: docker-compose --file docker-compose.yml up -d
+       args:
+         chdir: /tmp/shinobi/
