@@ -1,4 +1,7 @@
 ---
 - hosts: servers
   become: true
-  
+  tasks:
+    - name: update docker containers
+      docker_image:
+      pull: yes
