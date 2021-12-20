@@ -11,7 +11,7 @@
       upgrade: dist
   - name: disable terminal bell
     template: 
-      src: ~/homelab/config-templates/inputrc
+      src: /tmp/config-templates/inputrc
       dest: /etc/inputrc
   - name: install needed programs
     apt:
@@ -20,3 +20,9 @@
       - htop
       - nmap
       - mlocate
+  - name: update fstab
+    template:
+      src: /tmp/fstab
+      dest: /etc/fstab
+  - name: mount all drives
+    shell: mount -a
