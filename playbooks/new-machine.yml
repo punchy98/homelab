@@ -1,0 +1,22 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+  - name: update packages
+    apt: 
+      name: "*"
+      state: latest
+  - name: upgrade OS
+    apt:
+      upgrade: dist
+  - name: disable terminal bell
+    template: 
+      src: ~/homelab/config-templates/inputrc
+      dest: /etc/inputrc
+  - name: install needed programs
+    apt:
+      pkg:
+      - nfs-common
+      - htop
+      - nmap
+      - mlocate
