@@ -4,8 +4,3 @@
   tasks:
   - name: update docker images via docker pull
     shell: cd /home/punchy/media-compose && docker-compose pull
-    register: command_output
-  - debug:
-           var: command_output.stdout_lines
-#      community.docker.docker_image:
-#      pull: yes
