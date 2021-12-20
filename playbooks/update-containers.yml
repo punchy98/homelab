@@ -2,8 +2,8 @@
 - hosts: servers
   become: true
   tasks:
-  - name: get docker host info
-    shell: whoami
+  - name: update docker images via docker pull
+    shell: docker pull
     register: command_output
   - debug:
            var: command_output.stdout_lines
