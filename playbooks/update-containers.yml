@@ -1,5 +1,10 @@
 ---
 - hosts: servers
   become: true
-      community.docker.docker_image:
-      pull: yes
+  tasks:
+  - name: get docker host info
+  community.docker.docker_host_info:
+  register: result
+  
+#      community.docker.docker_image:
+#      pull: yes
