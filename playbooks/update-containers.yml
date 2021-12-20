@@ -1,7 +1,5 @@
 ---
 - hosts: servers
   become: true
-  tasks:
-    - name: update docker containers
       community.docker.docker_image:
       pull: yes
