@@ -16,6 +16,7 @@
       - htop
       - nmap
       - mlocate
+      - net-tools
   - name: disable terminal bell
     template: 
       src: /tmp/config-templates/inputrc
@@ -23,6 +24,6 @@
   - name: update fstab
     template:
       src: /tmp/fstab
-      dest: /etc/fstab    
+      dest: /etc/fstab
   - name: mount all drives
     shell: mount -a
