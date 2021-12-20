@@ -3,5 +3,5 @@
   become: true
   tasks:
     - name: update docker containers
-      docker_image:
+      community.docker.docker_image:
       pull: yes
