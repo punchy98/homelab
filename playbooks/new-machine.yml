@@ -9,10 +9,6 @@
   - name: upgrade OS
     apt:
       upgrade: dist
-  - name: disable terminal bell
-    template: 
-      src: /tmp/config-templates/inputrc
-      dest: /etc/inputrc
   - name: install needed programs
     apt:
       pkg:
@@ -20,9 +16,13 @@
       - htop
       - nmap
       - mlocate
+  - name: disable terminal bell
+    template: 
+      src: /tmp/config-templates/inputrc
+      dest: /etc/inputrc
   - name: update fstab
     template:
       src: /tmp/fstab
-      dest: /etc/fstab
+      dest: /etc/fstab    
   - name: mount all drives
     shell: mount -a
