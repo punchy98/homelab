@@ -1,28 +1,40 @@
----
-all:
-    servers:
-        bsd:
-            truenas.maldonado.tech
-        linux:
-            ubuntu:
-                docker.maldonado.tech
-                ansible.maldonado.tech
-            debian:
-                pihole.maldonado.tech
-            parrot:
-                parrot.maldonado.tech
-        vm-manage:
-            esxi01.maldonado.tech
-            esxi02.maldonado.tech
-            esxi03.maldonado.tech
-            vcenter.maldonado.tech
-        docker:
-            docker.maldonado.tech
-        testing:
-            192.168.1.166
-    network:
-        cisco:
-            n3k.maldonado.tech
-        dell:
-            t630.maldonado.tech
-            
+[bsd]
+truenas.maldonado.tech
+[debian]
+pihole.maldonado.tech
+[parrot]
+parrot.maldonado.tech
+[ubuntu]
+docker.maldonado.tech
+ansible.maldonado.tech
+[vm-manage]
+esxi01.maldonado.tech
+esxi02.maldonado.tech
+esxi03.maldonado.tech
+vcenter.maldonado.tech
+[docker]
+docker.maldonado.tech
+[testing]
+192.168.1.166
+[dell]
+t630.maldonado.tech
+[cisco]
+n3k.maldonado.tech
+[all:children]
+bsd
+debian
+parrot
+ubuntu
+vm-manage
+docker
+testing
+dell
+cisco
+[infra:children]
+cisco
+dell
+[server:children]
+[linux:children]
+debian
+parrot
+ubuntu
