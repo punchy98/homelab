@@ -1,5 +1,13 @@
-[servers]
-docker.maldonado.tech
-
-[testing]
-192.168.1.166
+all:
+    ubuntu:
+        docker.maldonado.tech
+        ansible.maldonado.tech
+    vm-manage:
+        esxi01.maldonado.tech
+        esxi02.maldonado.tech
+        esxi03.maldonado.tech
+        vcenter.maldonado.tech
+    docker:
+        docker.maldonado.tech
+    testing:
+        192.168.1.166
