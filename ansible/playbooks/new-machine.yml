@@ -21,6 +21,14 @@
     template: 
       src: /tmp/config-templates/inputrc
       dest: /etc/inputrc
+  - name: Add .profile template
+    template: 
+      src: /tmp/config-templates/.profile
+      dest: /home/punchy/.profile
+  - name: Add .bash_logout
+    template:
+      src: /tmp/config-templates/.bash_logout
+      dest: /home/punchy/.bash_logout
   - name: update fstab
     template:
       src: /tmp/fstab
