@@ -33,7 +33,11 @@ cisco
 [infra:children]
 cisco
 dell
-[server:children]
+[servers:children]
+debian
+ubuntu
+bsd
+testing
 [linux:children]
 debian
 parrot
