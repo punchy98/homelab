@@ -31,7 +31,7 @@
       dest: /home/punchy/.bash_logout
   - name: update fstab
     template:
-      src: /tmp/config-templates/fstab.config
+      src: /tmp/config-templates/fstab
       dest: /etc/fstab
   - name: mount all drives
     shell: mount -a
