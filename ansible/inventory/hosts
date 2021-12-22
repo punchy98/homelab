@@ -1,7 +1,7 @@
 [bsd]
 truenas.maldonado.tech
 [debian]
-pihole.maldonado.tech
+pihole.maldonado.tech ansible_ssh_user=pi
 [parrot]
 parrot.maldonado.tech
 [ubuntu]
@@ -20,7 +20,7 @@ docker.maldonado.tech
 [dell]
 t630.maldonado.tech
 [cisco]
-n3k.maldonado.tech
+n3k.maldonado.tech ansible_ssh_user=admin
 [all:children]
 bsd
 debian
