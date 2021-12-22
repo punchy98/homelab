@@ -31,7 +31,24 @@
       dest: /home/punchy/.bash_logout
   - name: update fstab
     template:
-      src: /tmp/config-templates/fstab
+      src: /tmp/config-templates/fstab.config
       dest: /etc/fstab
   - name: mount all drives
     shell: mount -a
+  - name: Install a private SSH key
+    vars:
+      source_key: /tmp/config-templates/labkey
+      dest_key: /home/punchy/.ssh/labkey
+    tasks:
+    - name: Ensure .ssh directory exists.
+      file: 
+        dest: "{{ dest_key | dirname }}"
+        mode: 0700 
+        owner: punchy 
+        state: directory
+    - name: Install ssh key
+      copy: 
+        src: "{{ source_key }}" 
+        dest: "{{ dest_key }}"
+        mode: 0600
+        owner: punchy
