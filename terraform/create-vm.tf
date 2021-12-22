@@ -9,7 +9,7 @@
 
 provider "vsphere" {
   user           = "administrator@maldonado.tech"
-  password       = "PASSWORD"
+  password       = "password"
   vsphere_server = "vcenter.maldonado.tech"
 
   # If you have a self-signed cert
@@ -29,5 +29,9 @@ module "Create-Ubuntu-Server" {
   vmgateway = "192.168.1.1"
   dc        = "homelab"
   datastore = "VM Storage"
+  dns_server_list = ["192.168.1.6"]
+  dns_suffix_list = ["maldonado.tech"]
+  domain = "maldonado.tech"
+
 }
 
