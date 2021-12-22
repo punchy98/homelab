@@ -7,7 +7,8 @@ parrot.maldonado.tech
 [ubuntu]
 docker.maldonado.tech
 ansible.maldonado.tech
-[vm-manage]
+192.168.1.166
+[vmmanage]
 esxi01.maldonado.tech
 esxi02.maldonado.tech
 esxi03.maldonado.tech
@@ -25,7 +26,7 @@ bsd
 debian
 parrot
 ubuntu
-vm-manage
+vmmanage
 docker
 testing
 dell
