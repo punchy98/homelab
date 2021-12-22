@@ -1,5 +1,5 @@
 ---
-- hosts: servers
+- hosts: testing
   become: true
   tasks:
   - name: update packages
