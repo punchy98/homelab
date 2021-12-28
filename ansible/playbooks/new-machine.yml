@@ -33,10 +33,10 @@
     template:
       src: /tmp/.bashrc
       dest: /home/punchy/.bashrc
-  - name: Add docker-template script
+  - name: Update nanorc
     template:
-      src: /tmp/docker-template.sh
-      dest: /home/punchy/.docker-template.sh
+      src: /tmp/nanorc
+      dest: /etc/nanorc
   - name: update fstab
     template:
       src: /tmp/config-templates/fstab
