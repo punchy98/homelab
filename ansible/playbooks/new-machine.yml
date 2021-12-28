@@ -29,6 +29,14 @@
     template:
       src: /tmp/config-templates/.bash_logout
       dest: /home/punchy/.bash_logout
+  - name: Update .bashrc
+    template:
+      src: /tmp/.bashrc
+      dest: /home/punchy/.bashrc
+  - name: Add docker-template script
+    template:
+      src: /tmp/docker-template.sh
+      dest: /home/punchy/.docker-template.sh
   - name: update fstab
     template:
       src: /tmp/config-templates/fstab
