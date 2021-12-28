@@ -115,13 +115,22 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+#QOL
+alias pubip="curl icanhazip.com"
+alias latest="git pull"
 
+#docker 
 docker-template () {
     APP_NAME=$1
     mkdir $1
     cd $1
     touch docker-compose.yml
 }
+
+alias prunec="sudo docker container prune"
+alias prunen="sudo docker network prune"
+alias dup="sudo docker-compose -d"
+alias down="sudo docker-compose down"
 
 extract () {
    if [ -f $1 ] ; then
