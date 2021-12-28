@@ -129,7 +129,7 @@ docker-template () {
 
 alias prunec="sudo docker container prune"
 alias prunen="sudo docker network prune"
-alias dup="sudo docker-compose -d"
+alias dup="sudo docker-compose up -d"
 alias down="sudo docker-compose down"
 
 extract () {
