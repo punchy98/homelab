@@ -8,9 +8,9 @@
 }
 
 provider "vsphere" {
-  user           = "administrator@maldonado.tech"
-  password       = "password"
-  vsphere_server = "vcenter.maldonado.tech"
+  user           = "${var.vsphere_user}"
+  password       = "${var.vsphere_password}"
+  vsphere_server = "${var.vsphere_server}"
 
   # If you have a self-signed cert
   allow_unverified_ssl = true
@@ -32,6 +32,5 @@ module "Create-Ubuntu-Server" {
   dns_server_list = ["192.168.1.6"]
   dns_suffix_list = ["maldonado.tech"]
   domain = "maldonado.tech"
-
 }
 
