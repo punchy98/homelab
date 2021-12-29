@@ -66,5 +66,4 @@ resource "vsphere_virtual_machine" "cloned_virtual_machine" {
   }
 }
 
-}
 
