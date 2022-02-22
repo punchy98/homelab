@@ -1,0 +1,98 @@
+version: "3"
+services:
+  vpn:
+    image: ghcr.io/bubuntux/nordvpn
+    container_name: vpn
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN               # Required
+    environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
+      - USER=${NORDUSER}     # Required
+      - "PASS=${NORDPASS}"         # Required
+      - CONNECT=United_States
+      - TECHNOLOGY=NordLynx
+      - FIREWALL=Disable
+      - TZ=America/Chicago
+      - DEBUG=Trace
+      - NETWORK=192.168.1.0/24
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+  torrent:
+    container_name: qbtt
+    image: ghcr.io/linuxserver/qbittorrent
+    network_mode: service:vpn
+    restart: always
+    depends_on:
+      - vpn
+    volumes:
+      - /mnt/media:/downloads
+      - /mnt/media/torrent-blackhole:/torrent-blackhole
+      - /mnt/media/configs/qbittorrent_config:/config
+  jackett:
+    container_name: jackett
+    image: linuxserver/jackett:latest
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/media/torrent-blackhole:/downloads
+      - /mnt/media/configs/jackett_config:/config
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/media/tv:/tv
+      - /mnt/media:/downloads
+      - /mnt/media/configs/sonarr_config:/config
+  
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr:latest
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/media/movies:/tv
+      - /mnt/media:/downloads
+      - /mnt/media/configs/radarr_config:/config
+  bazarr:
+    container_name: bazarr
+    image: linuxserver/bazarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/media/movies:/movies # movies folder
+      - /mnt/media/tv:/tv # tv shows folder
+      - /mnt/media/configs/bazarr_config:/config
+  kuma:
+    container_name: kuma
+    image: louislam/uptime-kuma:1
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    volumes:
+      - /mnt/media/configs/kuma_config:/app/data
+   
+  lidarr:
+    container_name: lidarr
+    image: linuxserver/lidarr:latest
+    restart: unless-stopped
+    environment:
+      - TZ=America/Chicago
+    ports:
+      - 8686:8686
+    volumes:
+      - /mnt/media/music-organized:/music
+      - /mnt/media/musicdownloads/amd/import:/downloads
+      - /mnt/media/configs/lidarr_config:/config
