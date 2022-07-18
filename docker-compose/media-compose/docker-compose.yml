@@ -14,7 +14,7 @@ services:
       - FIREWALL=Disable
       - TZ=America/Chicago
       - DEBUG=Trace
-      - NETWORK=192.168.1.0/24
+      - NETWORK=192.168.1.0/24,100.125.12.69/32
     ports:
       - 8080:8080
       - 6881:6881
@@ -96,3 +96,25 @@ services:
       - /mnt/media/music-organized:/music
       - /mnt/media/musicdownloads/amd/import:/downloads
       - /mnt/media/configs/lidarr_config:/config
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/media/configs/tautulli_config:/config
+    ports:
+      - 8282:8181
+    restart: unless-stopped
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - TZ=America/Chicago
+    ports:
+      - 5055:5055
+    volumes:
+      - /mnt/media/configs/overseerr_config:/app/config
+    restart: unless-stopped
