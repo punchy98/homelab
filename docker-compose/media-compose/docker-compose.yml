@@ -3,7 +3,7 @@ services:
   vpn:
     image: ghcr.io/bubuntux/nordvpn
     container_name: vpn
-    restart: unless-stopped
+    restart: ${RESTART}
     cap_add:
       - NET_ADMIN               # Required
     environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
@@ -12,7 +12,7 @@ services:
       - CONNECT=United_States
       - TECHNOLOGY=NordLynx
       - FIREWALL=Disable
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
       - DEBUG=Trace
       - NETWORK=192.168.1.0/24,100.125.12.69/32
     ports:
@@ -23,98 +23,98 @@ services:
     container_name: qbtt
     image: ghcr.io/linuxserver/qbittorrent
     network_mode: service:vpn
-    restart: always
+    restart: ${RESTART}
     depends_on:
       - vpn
     volumes:
-      - /mnt/media:/downloads
-      - /mnt/media/torrent-blackhole:/torrent-blackhole
-      - /mnt/media/configs/qbittorrent_config:/config
+      - ${MEDIA}:/downloads
+      - ${MEDIA}/torrent-blackhole:/torrent-blackhole
+      - ${CONFIGS}/qbittorrent_config:/config
   jackett:
     container_name: jackett
     image: linuxserver/jackett:latest
     network_mode: host
-    restart: unless-stopped
+    restart: ${RESTART}
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/media/torrent-blackhole:/downloads
-      - /mnt/media/configs/jackett_config:/config
+      - ${MEDIA}/torrent-blackhole:/downloads
+      - ${CONFIGS}/jackett_config:/config
   sonarr:
     container_name: sonarr
     image: linuxserver/sonarr
-    restart: unless-stopped
+    restart: ${RESTART}
     network_mode: host
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     volumes:
-      - /mnt/media/tv:/tv
-      - /mnt/media:/downloads
-      - /mnt/media/configs/sonarr_config:/config
+      - ${MEDIA}/tv:/tv
+      - ${MEDIA}:/downloads
+      - ${CONFIGS}/sonarr_config:/config
   
   radarr:
     container_name: radarr
     image: linuxserver/radarr:latest
-    restart: unless-stopped
+    restart: ${RESTART}
     network_mode: host
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     volumes:
-      - /mnt/media/movies:/tv
-      - /mnt/media:/downloads
-      - /mnt/media/configs/radarr_config:/config
+      - ${MEDIA}/movies:/tv
+      - ${MEDIA}:/downloads
+      - ${CONFIGS}/radarr_config:/config
   bazarr:
     container_name: bazarr
     image: linuxserver/bazarr
-    restart: unless-stopped
+    restart: ${RESTART}
     network_mode: host
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     volumes:
-      - /mnt/media/movies:/movies # movies folder
-      - /mnt/media/tv:/tv # tv shows folder
-      - /mnt/media/configs/bazarr_config:/config
+      - ${MEDIA}/movies:/movies # movies folder
+      - ${MEDIA}/tv:/tv # tv shows folder
+      - ${CONFIGS}/bazarr_config:/config
   kuma:
     container_name: kuma
     image: louislam/uptime-kuma:1
-    restart: unless-stopped
+    restart: ${RESTART}
     ports:
       - 3001:3001
     volumes:
-      - /mnt/media/configs/kuma_config:/app/data
+      - ${CONFIGS}/kuma_config:/app/data
    
   lidarr:
     container_name: lidarr
     image: linuxserver/lidarr:latest
-    restart: unless-stopped
+    restart: ${RESTART}
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     ports:
       - 8686:8686
     volumes:
-      - /mnt/media/music-organized:/music
-      - /mnt/media/musicdownloads/amd/import:/downloads
-      - /mnt/media/configs/lidarr_config:/config
+      - ${MEDIA}/music-organized:/music
+      - ${MEDIA}/musicdownloads/amd/import:/downloads
+      - ${CONFIGS}/lidarr_config:/config
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     volumes:
-      - /mnt/media/configs/tautulli_config:/config
+      - ${CONFIGS}/tautulli_config:/config
     ports:
       - 8282:8181
-    restart: unless-stopped
+    restart: ${RESTART}
   overseerr:
     image: sctx/overseerr:latest
     container_name: overseerr
     environment:
-      - TZ=America/Chicago
+      - TZ=${TIMEZONE}
     ports:
       - 5055:5055
     volumes:
-      - /mnt/media/configs/overseerr_config:/app/config
-    restart: unless-stopped
+      - ${CONFIGS}/overseerr_config:/app/config
+    ${RESTART}
