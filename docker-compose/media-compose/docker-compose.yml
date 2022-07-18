@@ -117,4 +117,4 @@ services:
       - 5055:5055
     volumes:
       - ${CONFIGS}/overseerr_config:/app/config
-    ${RESTART}
+    restart: ${RESTART}
