@@ -1,0 +1,16 @@
+---
+version: "2.1"
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+      - DEFAULT_WORKSPACE=/home/punchy/homelab
+    volumes:
+      - ${CONFIGS}/vscode_config:/config
+    ports:
+      - 8443:8443
+    restart: ${RESTART}
