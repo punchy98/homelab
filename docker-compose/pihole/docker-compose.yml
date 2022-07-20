@@ -9,11 +9,11 @@ services:
       - "53:53/udp"
       - "8888:80/tcp"
     environment:
-      TZ=${TIMEZONE}
-      WEBPASSWORD=${WEBPASSWORD}
+      TZ: ${TIMEZONE}
+      WEBPASSWORD: ${WEBPASSWORD}
     volumes:
-      - '${CONFIGS}/etc-pihole:/etc/pihole'
-      - '${CONFIGS}/etc-dnsmasq.d:/etc/dnsmasq.d'    
+      - ${CONFIGS}/pihole_configs/etc-pihole:/etc/pihole
+      - ${CONFIGS}/pihole_configs/etc-dnsmasq.d:/etc/dnsmasq.d
     cap_add:
       - NET_ADMIN # Recommended but not required (DHCP needs NET_ADMIN)      
     restart: ${RESTART}
