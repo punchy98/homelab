@@ -5,10 +5,10 @@ services:
     container_name: vpn
     restart: ${RESTART}
     cap_add:
-      - NET_ADMIN               # Required
-    environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
-      - USER=${NORDUSER}     # Required
-      - "PASS=${NORDPASS}"         # Required
+      - NET_ADMIN               
+    environment:            
+      - USER=${NORDUSER}    
+      - "PASS=${NORDPASS}"        
       - CONNECT=United_States
       - TECHNOLOGY=NordLynx
       - FIREWALL=Disable
@@ -72,8 +72,8 @@ services:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${MEDIA}/movies:/movies # movies folder
-      - ${MEDIA}/tv:/tv # tv shows folder
+      - ${MEDIA}/movies:/movies
+      - ${MEDIA}/tv:/tv
       - ${CONFIGS}/bazarr_config:/config
   kuma:
     container_name: kuma
@@ -83,19 +83,6 @@ services:
       - 3001:3001
     volumes:
       - ${CONFIGS}/kuma_config:/app/data
-   
-  lidarr:
-    container_name: lidarr
-    image: linuxserver/lidarr:latest
-    restart: ${RESTART}
-    environment:
-      - TZ=${TIMEZONE}
-    ports:
-      - 8686:8686
-    volumes:
-      - ${MEDIA}/music-organized:/music
-      - ${MEDIA}/musicdownloads/amd/import:/downloads
-      - ${CONFIGS}/lidarr_config:/config
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
