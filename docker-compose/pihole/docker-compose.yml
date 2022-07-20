@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8888:80/tcp"
+    environment:
+      TZ=${TIMEZONE}
+      WEBPASSWORD=${WEBPASSWORD}
+    volumes:
+      - '${CONFIGS}/etc-pihole:/etc/pihole'
+      - '${CONFIGS}/etc-dnsmasq.d:/etc/dnsmasq.d'    
+    cap_add:
+      - NET_ADMIN # Recommended but not required (DHCP needs NET_ADMIN)      
+    restart: ${RESTART}
