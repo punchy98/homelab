@@ -105,3 +105,17 @@ services:
     volumes:
       - ${CONFIGS}/overseerr_config:/app/config
     restart: ${RESTART}
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIGS}/sabnzbd_configs:/config
+      - ${MEDIA}/downloads:/downloads
+      - ${MEDIA}/incomplete-downloads:/incomplete-downloads
+    ports:
+      - 8383:8080
+    restart: ${RESTART}
