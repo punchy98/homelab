@@ -2,4 +2,4 @@
 - hosts: n3k.maldonado.tech
   tasks: 
     - name: get interfaces
-      nxos_get_interface: interface=Ethernet1/1
+    - nxos_get_interface: interface=Ethernet1/1
