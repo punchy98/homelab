@@ -1,6 +1,10 @@
 ---
 - name: get info
   hosts: n3k.maldonado.tech
+  collections: cisco.nxos
+
+  tasks:
+  - name: Getting interface info
     cisco.nxos.nxos_interfaces:
       cisco.nxos.nxos_config:
       - name: Ethernet1/1
