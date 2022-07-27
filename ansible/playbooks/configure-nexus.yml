@@ -1,5 +1,5 @@
 ---
 - hosts: n3k.maldonado.tech
   tasks: 
-    - cisco.nxos.nxos_config:
-      nxos_get_interface: interface=Ethernet1/1
+    - cisco.nxos.nxos_interfaces:
+      state: gathered
