@@ -2,7 +2,7 @@
 - name: get info
   hosts: n3k.maldonado.tech
     cisco.nxos.nxos_interfaces:
-      config:
+      cisco.nxos.nxos_config:
       - name: Ethernet1/1
         description: Configured by Ansible      
       state: gathered
