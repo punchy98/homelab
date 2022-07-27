@@ -1,0 +1,6 @@
+---
+- hosts: n3k.maldonado.tech
+  tasks: 
+    - name: get interfaces
+      nxos_interface: interface=Ethernet1/1 description='Configured by Ansible'
+      
