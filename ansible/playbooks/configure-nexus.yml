@@ -1,7 +1,5 @@
 ---
-- name: get info from n3k
+- name: get info
   hosts: n3k.maldonado.tech
-  tasks: 
-    name: get info
     cisco.nxos.nxos_interfaces:
       state: gathered
