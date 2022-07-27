@@ -24,15 +24,15 @@
   - name: Add .profile template
     template: 
       src: /tmp/config-templates/.profile
-      dest: /home/punchy/.profile
+      dest: /home/ubuntu/.profile
   - name: Add .bash_logout
     template:
       src: /tmp/config-templates/.bash_logout
-      dest: /home/punchy/.bash_logout
+      dest: /home/ubuntu/.bash_logout
   - name: Update .bashrc
     template:
       src: /tmp/config-templates/.bashrc
-      dest: /home/punchy/.bashrc
+      dest: /home/ubuntu/.bashrc
   - name: Update nanorc
     template:
       src: /tmp/config-templates/nanorc
@@ -46,6 +46,6 @@
   - name: Install ssh key
     copy: 
       src: /tmp/config-templates/labkey 
-      dest: /home/punchy/.ssh/labkey
+      dest: /home/ubuntu/.ssh/labkey
       mode: 0600
-      owner: punchy
+      owner: ubuntu
