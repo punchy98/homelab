@@ -1,0 +1,31 @@
+---
+- hosts: testing
+  become: true
+  tasks:
+  - name: update packages
+    dnf: 
+      name: "*"
+      state: latest
+  - name: install needed programs
+    dnf:
+      pkg:
+      - nfs-utils
+      - btop
+      - nmap
+      - grubby
+  - name: disable SELinux
+    shell: grubby --update-kernel ALL --args selinux=0
+  - name: update fstab
+    template:
+      src: ~/homelab/ansible/config-templates/fstab
+      dest: /etc/fstab
+  - name: mount all drives
+    shell: mount -a
+  - name: Install ssh key
+    copy: 
+      src: /tmp/config-templates/labkey 
+      dest: /home/punchy/.ssh/labkey
+      mode: 0600
+      owner: punchy
+ - name: reboot
+   reboot:
