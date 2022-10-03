@@ -13,6 +13,13 @@
       - btop
       - nmap
       - grubby
+      - p7zip
+      - vim
+  - name: remove unnecessary packages
+    dnf:
+      pkg:
+        - nano
+      state: absent
   - name: disable SELinux
     shell: grubby --update-kernel ALL --args selinux=0
   - name: update fstab
@@ -26,6 +33,10 @@
       src: /tmp/config-templates/labkey 
       dest: /home/punchy/.ssh/labkey
       mode: 0600
-      owner: punchy
+      owner: punchy 
+  - name: deploy dotfiles from git
+    git:
+      repo: https://github.com/punchy98/dotfiles
+      dest: /deployment/dotfiles
  - name: reboot
    reboot:
