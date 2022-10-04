@@ -1,13 +1,20 @@
----
-[redhat]
-100.87.250.76   #rhel9-01
-100.116.71.13   #rhel9-02 
-100.89.126.78   #plex
-[fedora]
-100.125.12.69   #workstation
-[debian]
-100.120.29.23   #docker-metal
-[bsd]
-100.70.154.15   #pfsense
-[testing]
-100.116.71.13   #rhel9-02 
+all:
+  children:
+    bsd:
+      hosts:
+        100.70.154.15: {}
+    debian:
+      hosts:
+        100.120.29.23: {}
+    fedora:
+      hosts:
+        100.125.12.69: {}
+    redhat:
+      hosts:
+        100.116.71.13: {}
+        100.87.250.76: {}
+        100.89.126.78: {}
+    testing:
+      hosts:
+        100.87.250.76: {}
+    ungrouped: {}

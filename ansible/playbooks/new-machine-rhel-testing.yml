@@ -1,5 +1,5 @@
 ---
-- hosts: testing #using rhel9-02 
+- hosts: testing #using rhel9-01 
   become: true
   tasks:
   - name: update packages
@@ -10,10 +10,11 @@
     dnf:
       pkg:
       - nfs-utils
-      - btop
+        #- epel-release
+        #- btop
       - nmap
       - grubby
-      - p7zip
+        #- p7zip
       - vim
   - name: remove unnecessary packages
     dnf:
@@ -24,19 +25,23 @@
     shell: grubby --update-kernel ALL --args selinux=0
   - name: update fstab
     template:
-      src: ~/homelab/ansible/config-templates/fstab
+      src: /home/punchy/homelab/config-templates/fstab
       dest: /etc/fstab
   - name: mount all drives
     shell: mount -a
   - name: Install ssh key
     copy: 
-      src: /tmp/config-templates/labkey 
+      src: /home/punchy/homelab/config-templates/labkey 
       dest: /home/punchy/.ssh/labkey
       mode: 0600
       owner: punchy 
+  - name: load ssh key
+    shell: if [ -z "$SSH_AUTH_SOCK" ] ; then eval `ssh-agent -s` ssh-add .ssh/labkey; fi 
   - name: deploy dotfiles from git
     git:
-      repo: https://github.com/punchy98/dotfiles
+      repo: git@github.com:punchy98/dotfiles.git
       dest: /deployment/dotfiles
- - name: reboot
-   reboot:
+      accept_hostkey: yes
+      key_file: /home/punchy/.ssh/labkey
+  - name: reboot
+    reboot:
