@@ -1,5 +1,5 @@
 ---
-- hosts: testing
+- hosts: testing #using rhel9-02 
   become: true
   tasks:
   - name: update packages
