@@ -43,5 +43,5 @@
       dest: /deployment/dotfiles
       accept_hostkey: yes
       key_file: /home/punchy/.ssh/labkey
-  - name: reboot
-    reboot:
+# - name: reboot
+#   reboot:
