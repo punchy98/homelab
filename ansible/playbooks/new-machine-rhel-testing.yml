@@ -2,6 +2,11 @@
 - hosts: testing #using rhel9-01 
   become: true
   tasks:
+  - name: install ssh pub key
+    authorized_key:
+      user: punchy
+      state: present
+      key: https://github.com/punchy98.keys
   - name: update packages
     dnf: 
       name: "*"
@@ -10,8 +15,8 @@
     dnf:
       pkg:
       - nfs-utils
-        #- epel-release
-        #- btop
+      - bat 
+      - vim-X11 
       - nmap
       - grubby
         #- p7zip
@@ -45,3 +50,10 @@
       key_file: /home/punchy/.ssh/labkey
 # - name: reboot
 #   reboot:
+#   need to add symlink mapping for configs from dotfiles
+#   ln -s ~/.vimrc ~/.config/nvim/init.vim
+#   ln -s ~/dotfiles/vim/.vimrc ~/.vimrc
+#   ln -s ~/dotfiles/bash/.bashrc ~/.bashrc
+#   ln -s ~/dotfiles/i3/config ~/.config/i3/config
+#   ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
+#   
