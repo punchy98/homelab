@@ -19,7 +19,6 @@
       - vim-X11 
       - nmap
       - grubby
-        #- p7zip
       - vim
   - name: remove unnecessary packages
     dnf:
@@ -45,9 +44,39 @@
   - name: deploy dotfiles from git
     git:
       repo: git@github.com:punchy98/dotfiles.git
-      dest: /deployment/dotfiles
+      dest: /home/punchy/dotfiles/ 
       accept_hostkey: yes
       key_file: /home/punchy/.ssh/labkey
+  - name: Create a symbolic link - vimrc 
+    file:
+      src: /home/punchy/dotfiles/vim/.vimrc
+      dest: ~/.vimrc 
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - bashrc 
+    file:
+      src: /home/punchy/dotfiles/bash/.bashrc
+      dest: ~/.bashrc
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - i3 
+    file:
+      src: /home/punchy/dotfiles/i3/config
+      dest: ~/.config/i3/config 
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - git 
+    file:
+      src: /home/punchy/dotfiles/git/.gitconfig
+      dest: ~/.gitconfig
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - vimrc -> init.vim (neovim) 
+    file:
+      src: ~/.vimrc
+      dest: ~/.config/nvim/init.vim 
+      owner: punchy
+      state: link
 # - name: reboot
 #   reboot:
 #   need to add symlink mapping for configs from dotfiles
