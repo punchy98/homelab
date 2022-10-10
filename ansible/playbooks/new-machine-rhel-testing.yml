@@ -1,13 +1,7 @@
 ---
-- hosts: testing #using rhel9-01 
+- hosts: testing
   become: true
   tasks:
- #- name: install ssh pub key
- #  authorized_key:
- #    user: punchy
- #    state: present
- #    key: https://github.com/punchy98.keys
- #    ^^^ no longer needed due to needing to copy sshkey onto machine immediately after deployment via ssh-copy-id
   - name: enable EPEL 
     shell: dnf install -y --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
   - name: enable rpm fusion
@@ -98,10 +92,3 @@
       state: link
 # - name: reboot
 #   reboot:
-#   need to add symlink mapping for configs from dotfiles
-#   ln -s ~/.vimrc ~/.config/nvim/init.vim
-#   ln -s ~/dotfiles/vim/.vimrc ~/.vimrc
-#   ln -s ~/dotfiles/bash/.bashrc ~/.bashrc
-#   ln -s ~/dotfiles/i3/config ~/.config/i3/config
-#   ln -s ~/dotfiles/git/.gitconfig ~/.gitconfig
-#   
