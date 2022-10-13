@@ -1,0 +1,92 @@
+---
+- hosts: testing
+  become: true
+  tasks:
+  - name: enable EPEL 
+    shell: dnf install -y --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
+  - name: enable rpm fusion
+    shell: dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
+  - name: update packages
+    dnf: 
+      name: "*"
+      state: latest
+  - name: install needed packages
+    dnf:
+      pkg:
+      - nfs-utils
+      - neovim 
+      - nmap
+      - git
+      - bat
+      - powerline-fonts
+  - name: remove unnecessary packages
+    dnf:
+      pkg:
+        - nano
+      state: absent
+  - name: update fstab
+    template:
+      src: /home/punchy/homelab/config-templates/fstab
+      dest: /etc/fstab
+  - name: mount all drives
+    shell: mount -a
+  - name: Install ssh key
+    copy: 
+      src: /home/punchy/homelab/config-templates/labkey 
+      dest: /home/punchy/.ssh/labkey
+      mode: 0600
+      owner: punchy 
+  - name: load ssh key
+    shell: if [ -z "$SSH_AUTH_SOCK" ] ; then eval `ssh-agent -s` ssh-add .ssh/labkey; fi 
+  - name: deploy dotfiles from git
+    git:
+      repo: git@github.com:punchy98/dotfiles.git
+      dest: /home/punchy/dotfiles/ 
+      accept_hostkey: yes
+      key_file: /home/punchy/.ssh/labkey
+  - name: remove current bashrc
+    file:
+      path: /home/punchy/.bashrc
+      state: absent
+  - name: Create an i3 directory if it does not exist
+    file:
+      path: /home/punchy/.config/i3
+      state: directory
+      mode: '0755'
+  - name: Create an nvim directory if it does not exist
+    file:
+      path: /home/punchy/.config/nvim
+      state: directory
+      mode: '0755'
+  - name: Create a symbolic link - vimrc 
+    file:
+      src: /home/punchy/dotfiles/vim/.vimrc
+      dest: /home/punchy/.vimrc 
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - bashrc 
+    file:
+      src: /home/punchy/dotfiles/bash/.bashrc
+      dest: /home/punchy/.bashrc
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - i3 
+    file:
+      src: /home/punchy/dotfiles/i3/config
+      dest: /home/punchy/.config/i3/config 
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - git 
+    file:
+      src: /home/punchy/dotfiles/git/.gitconfig
+      dest: /home/punchy/.gitconfig
+      owner: punchy
+      state: link
+  - name: Create a symbolic link - vimrc -> init.vim (neovim) 
+    file:
+      src: /home/punchy/.vimrc
+      dest: /home/punchy/.config/nvim/init.vim 
+      owner: punchy
+      state: link
+# - name: reboot
+#   reboot:
