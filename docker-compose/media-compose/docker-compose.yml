@@ -1,35 +1,5 @@
 version: "3"
 services:
-  vpn:
-    image: ghcr.io/bubuntux/nordvpn
-    container_name: vpn
-    restart: ${RESTART}
-    cap_add:
-      - NET_ADMIN               
-    environment:            
-      - USER=${NORDUSER}    
-      - "PASS=${NORDPASS}"        
-      - CONNECT=United_States
-      - TECHNOLOGY=NordLynx
-      - FIREWALL=Disable
-      - TZ=${TIMEZONE}
-      - DEBUG=Trace
-      - NETWORK=192.168.1.0/24,100.125.12.69/32
-    ports:
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
-  torrent:
-    container_name: qbtt
-    image: ghcr.io/linuxserver/qbittorrent
-    network_mode: service:vpn
-    restart: ${RESTART}
-    depends_on:
-      - vpn
-    volumes:
-      - ${MEDIA}:/downloads
-      - ${MEDIA}/torrent-blackhole:/torrent-blackhole
-      - ${CONFIGS}/qbittorrent_config:/config
   jackett:
     container_name: jackett
     image: linuxserver/jackett:latest

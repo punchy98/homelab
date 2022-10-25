@@ -1,0 +1,35 @@
+    transmission:
+        image: haugene/transmission-openvpn
+        container_name: transmission
+        cap_add:
+          - NET_ADMIN
+        dns:
+          - 192.168.1.175
+          - 8.8.4.4
+        environment:
+          - PUID=1000 
+          - PGID=1000 
+          - CREATE_TUN_DEVICE=true
+          - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+          - TRANSMISSION_RPC_USERNAME=admin
+          - TRANSMISSION_RPC_PASSWORD=adminadmin
+          - TRANSMISSION_WATCH_DIR=/watch
+          - TRANSMISSION_DOWNLOAD_DIR=/downloads
+          - TRANSMISSION_INCOMPLETE_DIR=/incomplete
+          - TRANSMISSION_WEB_UI=kettu
+          - OPENVPN_PROVIDER=NORDVPN
+          - OPENVPN_USERNAME=${NORDUSER}    
+          - "OPENVPN_PASSWORD=${NORDPASS}"  
+          - NORDVPN_CATEGORY=P2P
+          - NORDVPN_PROTOCOL=udp
+          - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+          - WEBPROXY_ENABLED=false
+          - LOCAL_NETWORK=192.168.1.0/24
+        volumes:
+          - /configs:/config
+          - /mnt/media/downloads:/downloads
+          - /mnt/media/incomplete-downloads:/incomplete
+          - /configs:/watch
+        ports:
+          - 8080:9091
+        restart: unless-stopped
