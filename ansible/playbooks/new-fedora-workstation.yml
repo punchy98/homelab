@@ -2,6 +2,8 @@
 - hosts: testing
   become: true
   tasks:
+  - name: include vault vars
+    inlude_vars: ~/homelab/ansible/vault.yml
   - name: enable EPEL 
     shell: dnf install -y --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
   - name: enable rpm fusion
@@ -26,67 +28,65 @@
       state: absent
   - name: update fstab
     template:
-      src: /home/punchy/homelab/config-templates/fstab
+      src: '{{home_dir}}'/homelab/config-templates/fstab
       dest: /etc/fstab
   - name: mount all drives
     shell: mount -a
   - name: Install ssh key
     copy: 
-      src: /home/punchy/homelab/config-templates/labkey 
-      dest: /home/punchy/.ssh/labkey
+      src: '{{ home_dir }}'/homelab/config-templates/labkey 
+      dest: '{{ home_dir }}'/.ssh/labkey
       mode: 0600
-      owner: punchy 
-  - name: load ssh key
-    shell: if [ -z "$SSH_AUTH_SOCK" ] ; then eval `ssh-agent -s` ssh-add .ssh/labkey; fi 
+      owner: '{{ user }}' 
   - name: deploy dotfiles from git
     git:
       repo: git@github.com:punchy98/dotfiles.git
-      dest: /home/punchy/dotfiles/ 
+      dest: '{{ home_dir }}'/dotfiles/ 
       accept_hostkey: yes
-      key_file: /home/punchy/.ssh/labkey
+      key_file: '{{ home_dir }}'/.ssh/labkey
   - name: remove current bashrc
     file:
-      path: /home/punchy/.bashrc
+      path: '{{ home_dir }}'/.bashrc
       state: absent
   - name: Create an i3 directory if it does not exist
     file:
-      path: /home/punchy/.config/i3
+      path: '{{ home_dir }}'/.config/i3
       state: directory
       mode: '0755'
   - name: Create an nvim directory if it does not exist
     file:
-      path: /home/punchy/.config/nvim
+      path: '{{ home_dir }}'/.config/nvim
       state: directory
       mode: '0755'
   - name: Create a symbolic link - vimrc 
     file:
-      src: /home/punchy/dotfiles/vim/.vimrc
-      dest: /home/punchy/.vimrc 
-      owner: punchy
+      src: '{{ home_dir }}'/dotfiles/vim/.vimrc
+      dest: '{{ home_dir }}'/.vimrc 
+      owner: '{{ user }}'
       state: link
   - name: Create a symbolic link - bashrc 
     file:
-      src: /home/punchy/dotfiles/bash/.bashrc
-      dest: /home/punchy/.bashrc
-      owner: punchy
+      src: '{{ home_dir }}'/dotfiles/bash/.bashrc
+      dest: '{{ home_dir }}'/.bashrc
+      owner: '{{ user }}'
       state: link
   - name: Create a symbolic link - i3 
     file:
-      src: /home/punchy/dotfiles/i3/config
-      dest: /home/punchy/.config/i3/config 
-      owner: punchy
+      src: '{{ home_dir }}'/dotfiles/i3/config
+      dest: '{{ home_dir }}'/.config/i3/config 
+      owner: '{{ user }}'
       state: link
   - name: Create a symbolic link - git 
     file:
-      src: /home/punchy/dotfiles/git/.gitconfig
-      dest: /home/punchy/.gitconfig
-      owner: punchy
+      src: '{{ home_dir }}'/dotfiles/git/.gitconfig
+      dest: '{{ home_dir }}'/.gitconfig
+      owner: '{{ user }}'
       state: link
   - name: Create a symbolic link - vimrc -> init.vim (neovim) 
     file:
-      src: /home/punchy/.vimrc
-      dest: /home/punchy/.config/nvim/init.vim 
-      owner: punchy
+      src: '{{ home_dir }}'/.vimrc
+      dest: '{{ home_dir }}'/.config/nvim/init.vim 
+      owner: '{{ user }}'
       state: link
 # - name: reboot
 #   reboot:
