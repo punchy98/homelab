@@ -1,0 +1,19 @@
+---
+- name: Install and Configure Docker
+  hosts: ubuntu-server
+  tasks:
+    - name: Remove conflicting packages
+      apt:
+        pkg: 
+          - docker.io
+          - docker-doc
+          - docker-compose
+          - podman-docker
+          - containerd
+          - runc
+        state: absent
+   
+    - name: Update Host
+      apt:
+        upgrade: yes
+        update_cache: yes

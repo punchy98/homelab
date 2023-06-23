@@ -1,0 +1,29 @@
+---
+- name: Create Ansible User
+  hosts: debian-based
+  become: true
+  tasks:
+    - name: Create User
+      user:
+        name: ansible
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+    - name: Provision Sudo Rules - all commands NOPASSWD
+      copy:
+        dest: "/etc/sudoers.d/cfg_ansible"
+        content: "ansible ALL=(ALL:ALL) NOPASSWD: ALL"
+    - name: Create .ssh dir
+      file:
+        path: /home/ansible/.ssh
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: '0700'
+    - name: Copy Ansible SSH Pub Key
+      copy:
+        src: /home/punchy/homelab/ansible/ansible_rsa.pub
+        dest: /home/ansible/.ssh/authorized_keys
+        owner: ansible
+        group: ansible
+        mode: '0600'

@@ -1,0 +1,6 @@
+---
+- name: Ping
+  hosts: all
+  tasks:
+    - name: Example from an Ansible Playbook
+      action: ping
