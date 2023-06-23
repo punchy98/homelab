@@ -1,6 +1,6 @@
 ---
 - name: Create Ansible User
-  hosts: debian-based
+  hosts: debian_based
   become: true
   tasks:
     - name: Create User
@@ -27,3 +27,16 @@
         owner: ansible
         group: ansible
         mode: '0600'
+    - name: Harden SSH
+      template:
+        src: /home/punchy/homelab/ansible/templates/etc/ssh/sshd_config
+        dest: /etc/ssh/sshd_config
+      notify:
+        - Restart SSH
+  handlers:
+    - name: Restart SSH
+      service:
+        name: 
+          - sshd
+          - ssh
+        state: restarted
