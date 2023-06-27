@@ -1,0 +1,25 @@
+---
+- name: Configure k3s cluster
+  hosts: lenovo01:lenovo02:lenovo03:lenovo04
+  gather_facts: false
+  vars:
+    k3s_token: "K10bed2afd313553a0dd35fae01b55adad2d4f8d5377891c137aff657590da8f580::server:a2054313db4e29cb60cec87c502b0095"
+    k3s_master_ip: "lenovo01"
+  tasks:
+    - name: Start and Enable the k3s-server service
+      shell: systemctl start k3s-server
+      when: "'lenovo01' in inventory_hostname"
+    - name: Configure k3s master node
+      shell: curl -sfL https://get.k3s.io | sh -
+      when: "'lenovo01' in inventory_hostname"
+    - name: Retrieve cluster token
+      shell: sudo cat /var/lib/rancher/k3s/server/node-token
+      register: cluster_token
+      when: "'lenovo01' in inventory_hostname"
+    - name: Start and Enable the k3s-agent service
+      shell: systemctl start k3s-agent
+      register: cluster_token
+      when: "'lenovo01' not in inventory_hostname"
+    - name: Configure k3s worker nodes
+      shell: curl -sfL https://get.k3s.io | K3S_URL=https://{{ k3s_master_ip }}:6443 K3S_TOKEN={{ k3s_token }} sh -
+      when: "'lenovo01' not in inventory_hostname"

@@ -1,0 +1,23 @@
+---
+- name: Deploy k3s
+  hosts: ubuntu_server
+  become: true
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - ca-certificates
+          - software-properties-common
+
+    - name: Download and install k3s
+      shell: curl -sfL https://get.k3s.io | sh -
+
+    - name: Retrieve cluster token
+      shell: sudo cat /var/lib/rancher/k3s/server/node-token
+      register: cluster_token
+
+    - name: Display cluster token
+      debug:
+        var: cluster_token.stdout
+
