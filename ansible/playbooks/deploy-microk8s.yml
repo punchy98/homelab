@@ -1,0 +1,49 @@
+---
+- name: Deploy microk8s
+  hosts: ubuntu_server
+  become: true
+  tasks: 
+    - name: Install docker
+      apt:
+        name: docker.io
+        update_cache: true
+        cache_valid_time: 86400
+        state: present
+    - name: Install microk8s
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+    - name: Add user to Docker/Microk8s group
+      user:
+        name: punchy
+        state: present
+        groups:
+          - docker
+          - microk8s
+        append: true
+    - name: Create .bashrc if not exists
+      file:
+        path: /home/punchy/.bashrc
+        owner: punchy
+        group: punchy
+    - name: Configure /etc/hosts
+      template:
+        src: /home/punchy/homelab/ansible/templates/etc/hosts
+        dest: /etc/hosts
+    - name: Add alias to kubectl
+      lineinfile:
+        path: '/home/punchy/.bashrc'
+        regexp: '^alias kubectl='
+        line: 'alias kubectl="microk8s kubectl"'
+        state: present
+    - name: Add bash completion for kubectl
+      lineinfile:
+        path: '/home/punchy/.bashrc'
+        regexp: '^source \<\(kubectl'
+        line: 'source <(kubectl completion bash)'
+        state: present
+    - name: Configure k8s dns
+      command: microk8s enable dns
+    - name: Configure storage
+      command: microk8s enable hostpath-storage

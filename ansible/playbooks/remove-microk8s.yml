@@ -1,0 +1,32 @@
+---
+- name: Deploy microk8s
+  hosts: ubuntu_server
+  become: true
+  tasks: 
+    - name: Remove docker
+      apt:
+        state: absent
+    - name: Remove microk8s
+      snap:
+        name: microk8s
+        state: absent
+    - name: Remove user from Docker/Microk8s group
+      user:
+        name: punchy
+        state: absent
+        groups:
+          - docker
+          - microk8s
+        append: true
+    - name: Remove alias from kubectl
+      lineinfile:
+        path: '/home/punchy/.bashrc'
+        regexp: '^alias kubectl='
+        line: 'alias kubectl="microk8s kubectl"'
+        state: absent
+    - name: Remove bash completion for kubectl
+      lineinfile:
+        path: '/home/punchy/.bashrc'
+        regexp: '^source \<\(kubectl'
+        line: 'source <(kubectl completion bash)'
+        state: absent
