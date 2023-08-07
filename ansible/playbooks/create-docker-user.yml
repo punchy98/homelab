@@ -1,0 +1,42 @@
+---
+- name: Create Docker User
+  hosts: ubuntu_server
+  become: true
+  tasks:
+    - name: Create User
+      user:
+        name: docker
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+    - name: Provision Sudo Rules - docker commands NOPASSWD
+      copy:
+        dest: "/etc/sudoers.d/cfg_docker"
+        content: "docker ALL=(ALL:ALL) NOPASSWD: /usr/bin/docker *"
+    - name: Create .ssh dir
+      file:
+        path: /home/docker/.ssh
+        state: directory
+        owner: docker
+        group: docker
+        mode: '0700'
+    - name: Copy Docker SSH Pub Key
+      copy:
+        src: /home/punchy/homelab/ansible/docker_rsa.pub
+        dest: /home/docker/.ssh/authorized_keys
+        owner: docker
+        group: docker
+        mode: '0600'
+    - name: Harden SSH
+      template:
+        src: /home/punchy/homelab/ansible/templates/etc/ssh/sshd_config
+        dest: /etc/ssh/sshd_config
+      notify:
+        - Restart SSH
+  handlers:
+    - name: Restart SSH
+      service:
+        name: 
+          - sshd
+          - ssh
+        state: restarted
