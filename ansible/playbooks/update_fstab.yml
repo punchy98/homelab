@@ -1,0 +1,31 @@
+---
+- name: Ensure line is present in /etc/fstab
+  hosts: testing
+  become: true
+  tasks:
+    - name: Install NFS client package
+      package:
+        name: "{{ 'nfs-common' if ansible_os_family == 'Debian' else 'nfs-utils' }}"
+        state: present
+      
+    - name: Check if the line is already present in /etc/fstab
+      shell: "grep -q '^192.168.1.193:/primary01-10tb/storage/media /mnt/storage nfs defaults 0 0' /etc/fstab"
+      register: fstab_check
+      ignore_errors: true
+
+    - name: Add the line to /etc/fstab if it's missing
+      lineinfile:
+        path: /etc/fstab
+        line: "192.168.1.193:/primary01-10tb/storage/media /mnt/storage nfs defaults 0 0"
+        state: present
+      when: fstab_check.rc != 0
+
+    - name: Ensure /mnt/storage directory exists
+      file:
+        path: /mnt/storage
+        state: directory
+        mode: '0755'
+
+    - name: Mount filesystems from /etc/fstab
+      command: mount -a
+      when: fstab_check.rc != 0  # Only mount if a new line was added to fstab
