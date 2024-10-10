@@ -1,0 +1,59 @@
+---
+- name: Configure DHCP client and broadcast hostname on Ubuntu 24.04
+  hosts: raw_ips
+  become: yes
+
+  tasks:
+
+    - name: Get the first non-loopback interface
+      set_fact:
+        primary_interface: "{{ ansible_facts['ansible_interfaces'] | difference(['lo']) | first }}"
+
+    - name: Ensure the netplan package is installed
+      apt:
+        name: netplan.io
+        state: present
+        update_cache: yes
+
+    - name: Create netplan configuration file for DHCP client
+      copy:
+        dest: /etc/netplan/01-netcfg.yaml
+        content: |
+          network:
+            version: 2
+            ethernets:
+              {{ primary_interface }}:
+                dhcp4: true
+                dhcp4-overrides:
+                  send-hostname: true
+                dhcp6: true
+                dhcp6-overrides:
+                  send-hostname: true
+
+    - name: Apply the netplan configuration
+      command: netplan apply
+    - name: Get the current hostname
+      ansible.builtin.set_fact:
+        current_hostname: "{{ ansible_hostname }}"
+
+    - name: Print the hostname of the current host
+      ansible.builtin.debug:
+        msg: "The hostname of this host is {{ ansible_hostname }}" 
+
+    - name: Ensure the hostname is set correctly
+      hostname:
+        name: "{{ ansible_hostname }}"
+        
+    - name: Update /etc/hostname with the current hostname
+      copy:
+        dest: /etc/hostname
+        content: "{{ ansible_hostname }}"
+
+    - name: Update /etc/hosts with the current hostname
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.0\.1\s+'
+        line: "127.0.0.1 {{ ansible_hostname }}"
+        state: present
+
+

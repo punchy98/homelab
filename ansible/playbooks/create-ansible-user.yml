@@ -1,6 +1,6 @@
 ---
 - name: Create Ansible User
-  hosts: debian_based
+  hosts: ubuntu_server
   become: true
   tasks:
     - name: Create User
@@ -31,12 +31,9 @@
       template:
         src: /home/punchy/homelab/ansible/templates/etc/ssh/sshd_config
         dest: /etc/ssh/sshd_config
-      notify:
-        - Restart SSH
-  handlers:
-    - name: Restart SSH
-      service:
-        name: 
-          - sshd
-          - ssh
+    - name: Ensure multiple services are running
+      ansible.builtin.service:
+        name: "{{ item }}"
         state: restarted
+      loop:
+        - ssh

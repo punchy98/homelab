@@ -1,0 +1,20 @@
+---
+- name: Update dhcpcd to send hostname 
+  hosts: raw_ips
+  become: true
+  tasks:
+    - name: Get the current hostname
+      ansible.builtin.set_fact:
+        current_hostname: "{{ ansible_hostname }}"
+
+    - name: Print the hostname of the current host
+      ansible.builtin.debug:
+        msg: "The hostname of this host is {{ ansible_hostname }}" 
+    - name: Start dhcpcd with the hostname flag
+      ansible.builtin.shell: "dhcpcd -h {{ ansible_hostname }}"
+
+    - name: Restart networking systemd unit to apply the changes
+      ansible.builtin.systemd_service:
+        name: networking
+        state: restarted
+        enabled: yes
