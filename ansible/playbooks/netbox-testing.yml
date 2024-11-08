@@ -1,0 +1,18 @@
+---
+- name: NetBox Testing Playbook
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    netbox_api_url: "https://192.168.1.234"
+    netbox_api_token: "" # TODO pull from vault 
+
+  tasks:
+    - name: Example from an Ansible Playbook
+      action: ping
+
+    # Test lookup query with raw output
+    - name: Debug NetBox Lookup Response
+      debug:
+        msg: "{{ query('netbox.netbox.nb_lookup', 'devices', api_url=netbox_api_url, api_token=netbox_api_token, validate_certs=False) }}"
+

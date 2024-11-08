@@ -1,0 +1,23 @@
+---
+- name: Get all port descriptions from switch n3k
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    netbox_api_url: "https://192.168.1.234"  
+    netbox_api_token: ""  # TODO pull from vault
+    switch_name: "n3k"
+
+  tasks:
+    - name: Display all host variables from NetBox
+      debug:
+        var: hostvars[inventory_hostname]
+    # query a list of devices
+    - name: Obtain list of devices from NetBox
+      debug:
+        msg: >
+          "Device {{ item.value.display_name }} (ID: {{ item.key }}) was
+           manufactured by {{ item.value.device_type.manufacturer.name }}"
+      loop: "{{ query('netbox.netbox.nb_lookup', 'devices',
+                      api_endpoint={{ netbox_api_url }},
+                      token={{ netbox_api_token }}) }}"

@@ -1,0 +1,30 @@
+- hosts: cisco
+  gather_facts: false
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_network_os: cisco.ios.ios
+    ansible_become: true
+    ansible_become_method: enable
+
+  tasks:
+
+  - name: Gather only the config and default facts
+    cisco.ios.ios_facts:
+      gather_subset:
+        - config
+
+  - name: Show Gathered Facts
+    debug:
+      msg: "{{ ansible_facts }}"
+
+  - name: Run show version on Remote Device
+    cisco.ios.ios_command:
+      commands:
+        - show version
+    register: results
+
+  - name: Show results
+    debug:
+      msg: "{{ results.stdout_lines }}"
+

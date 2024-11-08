@@ -1,0 +1,68 @@
+---
+- name: Get all port descriptions from netbox for nexus switches and configure the interface descriptions
+  hosts: sw-3048 # DO NOT SET TO MORE THAN ONE HOST 
+  gather_facts: no
+  vars_files:
+    - /home/punchy/homelab/ansible/vault.yml
+
+  vars:
+    collections: cisco.nxos
+    gather_facts: false
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_network_os: cisco.nxos.nxos
+    ansible_become: true
+    ansible_become_method: enable
+    ansible_connection: network_cli
+    ansible_httpapi_use_ssl: yes
+    ansible_httpapi_validate_certs: no
+    ansible_network_os: nxos
+    ansible_user: admin
+    netbox_api_url: "https://192.168.1.234/api"
+    switch_name: "n3k"
+    switch_host: "192.168.1.222"
+    switch_username: "admin" 
+    # Load encrypted values
+    ansible_httpapi_pass: "{{ ansible_vault.ansible_httpapi_pass }}"
+    netbox_api_token: "{{ ansible_vault.netbox_api_token }}"
+    switch_password: "{{ ansible_vault.switch_password }}"
+  tasks:
+    - name: Get switch details (device) from NetBox
+      uri:
+        url: "{{ netbox_api_url }}/dcim/devices/?name={{ switch_name }}"
+        headers:
+          Authorization: "Token {{ netbox_api_token }}"
+          Content-Type: "application/json"
+        method: GET
+        validate_certs: false
+      register: switch_details
+
+    - name: Fail if switch not found
+      fail:
+        msg: "Switch '{{ switch_name }}' not found in NetBox."
+      when: switch_details.json.results | length == 0
+
+    - name: Get interfaces for the switch
+      uri:
+        url: "{{ netbox_api_url }}/dcim/interfaces/?device_id={{ switch_details.json.results[0].id }}"
+        headers:
+          Authorization: "Token {{ netbox_api_token }}"
+          Content-Type: "application/json"
+        method: GET
+        validate_certs: false
+      register: interfaces
+
+    - name: Output port descriptions for the switch
+      debug:
+        msg: |
+          Interface Name: {{ item.name }}
+          Description: {{ item.description if item.description else 'No Description' }}
+      loop: "{{ interfaces.json.results }}"
+
+    - name: Configure the switch with port descriptions
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.description if item.description else 'No Description' }}"
+        state: merged
+      loop: "{{ interfaces.json.results }}"
+

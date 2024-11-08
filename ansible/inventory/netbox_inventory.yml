@@ -1,0 +1,7 @@
+# netbox_inventory.yml
+plugin: netbox.netbox.nb_inventory
+api_endpoint: https://192.168.1.234
+token: # TODO pull from vault
+validate_certs: false
+  #device_query_filters:
+  #- has_primary_ip: 'true'

@@ -1,0 +1,8 @@
+---
+- name: Get all port descriptions from switch n3k
+  hosts: n3k  # Hostname of your switch in NetBox
+  gather_facts: no
+  tasks:
+    - name: Show interfaces and descriptions
+      debug:
+        var: ansible_netbox_interfaces

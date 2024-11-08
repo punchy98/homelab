@@ -1,0 +1,41 @@
+---
+- name: Get all port descriptions from switch n3k using direct API calls
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    netbox_api_url: "https://192.168.1.234/api"
+    netbox_api_token: "" # TODO pull from vault
+    switch_name: "n3k"  # Change this to the name of the switch
+
+  tasks:
+    - name: Get switch details (device) from NetBox
+      uri:
+        url: "{{ netbox_api_url }}/dcim/devices/?name={{ switch_name }}"
+        headers:
+          Authorization: "Token {{ netbox_api_token }}"
+          Content-Type: "application/json"
+        method: GET
+        validate_certs: false
+      register: switch_details
+
+    - name: Fail if switch not found
+      fail:
+        msg: "Switch '{{ switch_name }}' not found in NetBox."
+      when: switch_details.json.results | length == 0
+
+    - name: Get interfaces for the switch
+      uri:
+        url: "{{ netbox_api_url }}/dcim/interfaces/?device_id={{ switch_details.json.results[0].id }}"
+        headers:
+          Authorization: "Token {{ netbox_api_token }}"
+          Content-Type: "application/json"
+        method: GET
+        validate_certs: false
+      register: interfaces
+
+    - name: Output port descriptions for the switch
+      debug:
+        msg: "Interface {{ item.name }}: Description - {{ item.description }}"
+      loop: "{{ interfaces.json.results }}"
+
