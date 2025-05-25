@@ -1,0 +1,30 @@
+---
+- name: Deploy ntfy SSH login alert script
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+
+    - name: Ensure ntfy-ssh-login.sh exists with correct content
+      copy:
+        dest: /usr/bin/ntfy-ssh-login.sh
+        mode: '0755'
+        owner: root
+        group: root
+        content: |
+          #!/bin/bash
+          if [ "${PAM_TYPE}" = "open_session" ]; then
+            curl \
+              -H prio:high \
+              -H tags:warning \
+              -d "SSH login to $(hostname): ${PAM_USER} from IP ${PAM_RHOST} - DNS Name =  $(nslookup ${PAM_RHOST}| awk -F'= ' '/name/ {gsub(/\.$/, "", $2); print $2}')" \
+              http://container-services.tailbc811.ts.net:8998/alerts
+          fi
+
+    - name: Ensure PAM sshd config has ntfy hook
+      lineinfile:
+        path: /etc/pam.d/sshd
+        line: 'session optional pam_exec.so /usr/bin/ntfy-ssh-login.sh'
+        insertafter: EOF
+        state: present
+        create: no
