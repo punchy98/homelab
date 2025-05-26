@@ -1,0 +1,17 @@
+---
+- name: Update file permissions on plex-ubuntu
+  hosts: plex-ubuntu
+  become: true
+  tasks:
+    - name: Find all files in the transfers directory
+      ansible.builtin.find:
+        paths: /mnt/storage/nicotine_logs/transfers/
+        file_type: file
+      register: found_files
+
+    - name: Set permissions on all found files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        mode: '0644'
+      loop: "{{ found_files.files }}"
+
