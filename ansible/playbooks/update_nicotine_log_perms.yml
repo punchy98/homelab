@@ -1,6 +1,6 @@
 ---
 - name: Update file permissions on plex-ubuntu
-  hosts: plex-ubuntu.tailbc811.ts.net
+  hosts: 100.87.255.61
   become: true
   tasks:
     - name: Find all files in the transfers directory
