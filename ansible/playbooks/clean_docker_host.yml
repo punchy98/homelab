@@ -1,0 +1,23 @@
+---
+- name: Docker cleanup on container-services
+  hosts: container-services
+  become: true
+  tasks:
+
+    - name: Prune unused containers
+      community.docker.docker_prune:
+        containers: yes
+
+    - name: Prune unused images
+      community.docker.docker_prune:
+        images: yes
+
+    - name: Prune unused networks
+      community.docker.docker_prune:
+        networks: yes
+
+    - name: Prune unused volumes (optional and more destructive)
+      community.docker.docker_prune:
+        volumes: yes
+      when: cleanup_volumes | default(false)
+
