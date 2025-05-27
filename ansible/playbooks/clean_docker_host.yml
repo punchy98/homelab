@@ -1,6 +1,6 @@
 ---
 - name: Docker cleanup on container-services
-  hosts: container-services
+  hosts: docker
   become: true
   tasks:
 
