@@ -1,6 +1,9 @@
 # 🧪 Maldonado Homelab
 
-Welcome to the Maldonado Homelab — a modular, infrastructure-as-code-driven environment for testing, development, and automation. This lab is built to support hands-on experimentation with modern DevOps, networking, and security tools. The focus is on automation, observability, and clean infrastructure practices. This repo/readme will get updates sparingly as I am now using a selfhosted GitLab instance to host all my homelab code.
+Welcome to the Maldonado Homelab — a modular, infrastructure-as-code-driven environment for testing, development, and automation. This lab is built to support hands-on experimentation with modern DevOps, networking, and security tools. The focus is on automation, observability, and clean infrastructure practices. 
+
+
+Note - This repo/readme will get updates sparingly as I am now using a selfhosted GitLab instance to host all my homelab code.
 ---
 
 ## 🏗️ Core Architecture
