@@ -4,6 +4,8 @@ Welcome to the Maldonado Homelab — a modular, infrastructure-as-code-driven en
 
 
 Note - This repo/readme will get updates sparingly as I am now using a selfhosted GitLab instance to host all my homelab code.
+
+
 ---
 
 ## 🏗️ Core Architecture
