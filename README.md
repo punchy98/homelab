@@ -1,4 +1,4 @@
-# 🧪 Maldonado Homelab
+# Maldonado Homelab
 
 Welcome to the Maldonado Homelab — a modular, infrastructure-as-code-driven environment for testing, development, and automation. This lab is built to support hands-on experimentation with modern DevOps, networking, and security tools. The focus is on automation, observability, and clean infrastructure practices. 
 
@@ -8,7 +8,7 @@ Note - This repo/readme will get updates sparingly as I am now using a selfhoste
 
 ---
 
-## 🏗️ Core Architecture
+## Core Architecture
 
 - **Virtualization Platform**: [Proxmox VE](https://www.proxmox.com/en/) (3-node cluster - 192GB RAM, 112 cores)
   - Dell r630 - 32x cores, 64gb RAM
@@ -26,7 +26,7 @@ Note - This repo/readme will get updates sparingly as I am now using a selfhoste
 
 ---
 
-## 🔐 Networking & Firewall
+## Networking & Firewall
 
 - **Firewall**:
   - ER8411
@@ -49,7 +49,7 @@ Note - This repo/readme will get updates sparingly as I am now using a selfhoste
 
 ---
 
-## 🛠️ Automation Stack
+## Automation Stack
 
 | Tool       | Purpose                                                                 |
 |------------|-------------------------------------------------------------------------|
@@ -62,29 +62,29 @@ Note - This repo/readme will get updates sparingly as I am now using a selfhoste
 
 ## ⚙️ Projects & Features
 
-### 🧠 Source of Truth (NetBox)
+### Source of Truth (NetBox)
 - Dynamic updates via:
   - Terraform → NetBox sync for IPs and DNS
   - Omada → NetBox sync for wireless clients with tagging
 - Tags (e.g., `dns-automation`, `omada-dynamic`) for classifying entries
 
-### 🛰️ Launchpad Server
+### Launchpad Server
 - Acts as:
   - SSH bastion host
   - Development and testing sandbox
 - Provisioned using Terraform + Ansible with NetBox DNS/IP resolution
 
-### 🧩 DNS Automation
+### DNS Automation
 - Terraform-managed zone entries for `BIND9`
 - NetBox acts as the single source of truth for DNS records
 - Dynamic updates with rollback-safe Git commits and CI/CD integration
 
-### 📦 Docker Automation
+### Docker Automation
 - Declarative `docker-compose.yml` deployment via GitLab Terraform provider
 - Declarative port mappings maintained in Git
 - Support for both production and test Docker hosts
 
-### 🧰 GitLab Runner Provisioning
+### GitLab Runner Provisioning
 - Runners automatically deployed on Proxmox via:
   - Terraform (VM creation)
   - Ansible (GitLab Runner install + registration)
@@ -92,23 +92,23 @@ Note - This repo/readme will get updates sparingly as I am now using a selfhoste
 
 ---
 
-## 📚 Learning & Certifications
+## Learning & Certifications
 
 - Mini threat hunts and custom detection logic under development for SOC simulation with Security Onion.
 
 ---
 
-## 📅 Scheduling & Workflow
+## Scheduling & Workflow
 
 - Infrastructure designed for minimal manual intervention and fast redeploys
 
 ---
 
-## 💡 Roadmap
+## Roadmap
 
-- 🔍 Implement mini SOC with custom detection rules and log analysis
-- 🔄 Full GitOps pipeline from commit → deploy → NetBox/DNS sync
-- 🔌 Implement Terraform module for NetBox-native VM provisioning
+-  Implement mini SOC with custom detection rules and log analysis
+-  Full GitOps pipeline from commit → deploy → NetBox/DNS sync
+-  Implement Terraform module for NetBox-native VM provisioning
 
 ---
 
